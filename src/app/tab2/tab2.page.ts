@@ -1,12 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { NavController, ActionSheetController } from '@ionic/angular';
 import { CommonService } from '../services/common.service';
-import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
-
 
 let headers: any;
-// let budgetID: any;
 
 @Component({
   selector: 'app-tab2',
@@ -15,115 +12,50 @@ let headers: any;
 })
 export class Tab2Page implements OnInit {
 
-    message: string;
-    gotMessage: any;
-    selectedText: string;
-    text: string;
-    price: string;
-    generated: string;
-    date: string;
-    memo: string;
-    account: string;
-    templateName: string;
-    dynamic: any;
-    // private accounts: any;
     private templates: any[];
-    public availableTemplates: any = [];
+    public availableCategories: any = [];
 
     constructor(private storage: Storage,
                 private commonService: CommonService,
                 public navCtrl: NavController,
-                public actionSheetController: ActionSheetController,
-                public androidPermissions: AndroidPermissions) {
-        this.templateName = '';
-        this.message = '';
-        this.gotMessage = false;
-        this.selectedText = '';
-        this.text = '';
-        this.price = '';
-        this.generated = '';
-        this.date = '';
-        this.memo = '';
-        this.dynamic = [];
+                public actionSheetController: ActionSheetController) {
     }
 
     deleteTemplate(item) {
-        this.availableTemplates = this.availableTemplates.filter(x => x.name !== item.name);
-        this.storage.set('templates', JSON.stringify(this.availableTemplates));
+        this.availableCategories = this.availableCategories.filter(x => x.name !== item.name);
+        this.storage.set('quota', JSON.stringify(this.availableCategories));
+        this.commonService.createToast('Category removed from list');
     }
 
     doRefresh(event) {
-        this.updateAvailableTemplates(event);
-        // setTimeout(() => {
-        //     console.log('Updating accounts');
-        //     event.target.complete();
-        // }, 500);
+        this.updateAvailableCategories(event);
     }
 
     async presentActionSheet(data) {
         const actionSheet = await this.actionSheetController.create({
             buttons: [{
+                text: 'Edit',
+                role: 'destructive',
+                icon: 'create',
+                handler: () => {
+                    this.commonService.createToast('Add edit event function');
+                }
+            },{
                 text: 'Delete',
                 role: 'destructive',
                 icon: 'trash',
                 handler: () => {
                     this.deleteTemplate(data);
-                    this.commonService.createToast('Template Deleted');
                 }
             }]
         });
         await actionSheet.present();
     }
 
-    selectMessage() {
-        this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.READ_SMS).then(
-            success => {
-                if (!success.hasPermission) {
-                    this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_SMS).
-                    then(() => {
-                            this.navCtrl.navigateForward('/select-message');
-                        },
-                        (err) => {
-                            console.error(err);
-                        });
-                } else {
-                    this.navCtrl.navigateForward('/select-message');
-                }
-            },
-            err => {
-                this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_SMS).
-                then((success) => {
-                        this.navCtrl.navigateForward('/select-message');
-                    },
-                    (error) => {
-                        console.error(error);
-                    });
-            });
-    }
-
-    // updateAccounts() {
-    //     this.storage.get('accounts').then((val) => {
-    //         if (val === null) {
-    //             this.platform.ready().then((readySource) => {
-    //                 this.http.get(`https://api.youneedabudget.com/v1/budgets/${budgetID}`, {}, headers).then(data => {
-    //                     const parsedAccounts = JSON.parse(data.data).data.budget.accounts;
-    //                     this.storage.set('accounts', JSON.stringify(parsedAccounts));
-    //                 })
-    //                     .catch(error => {
-    //                         console.log(error.error); // error message as string
-    //                     });
-    //             });
-    //         } else {
-    //             this.accounts = JSON.parse(val);
-    //         }
-    //     });
-    // }
-
     ngOnInit() {
-
         this.storage.get('apiToken').then((val) => {
             if (val === null) {
-                this.commonService.createToast('Access Token not available');
+                this.commonService.createToast('Access token not available');
             } else {
                 const apiToken = val;
                 headers = {
@@ -131,27 +63,20 @@ export class Tab2Page implements OnInit {
                 };
             }
         });
-
-        // this.storage.get('budgetID').then((val) => {
-        //     if (val === null) {
-        //         this.commonService.createToast('Set Budget in Settings');
-        //     } else {
-        //         budgetID = val;
-        //     }
-        // });
-        // this.updateAccounts();
-
-        this.updateAvailableTemplates(null);
-
+        this.updateAvailableCategories(null);
     }
 
-    updateAvailableTemplates(e) {
-        this.storage.get('templates').then((val) => {
+    addCategory() {
+        this.navCtrl.navigateForward('/select-message');
+    }
+
+    updateAvailableCategories(e) {
+        this.storage.get('quota').then((val) => {
             if (e) {
                 e.target.complete();
             }
             if (val != null) {
-                this.availableTemplates = JSON.parse(val);
+                this.availableCategories = JSON.parse(val);
             }
         });
     }

@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Choose Message</ion-title>
+    <ion-title>Choose the category</ion-title>
     <ion-buttons slot="start">
       <ion-button color="dark" (click)="goBack()">
         <ion-icon name="arrow-back"></ion-icon>
@@ -11,40 +11,28 @@
 
 <ion-content>
 
-  <!--<ion-list>-->
-    <!--<ion-item *ngFor="let x of retrievedMessages" (click)="presentActionSheet(x.body)">-->
-      <!--<ion-label>{{x.address}}</ion-label>-->
-      <!--<div><p>{{x.body | slice:0:30}}</p></div>-->
-    <!--</ion-item>-->
-  <!--</ion-list>-->
+  <ion-card (click)="setBudget()">
+    <ion-card-header>
+      <ion-card-subtitle class="middle-align">Budget</ion-card-subtitle>
+      <ion-card-title class="middle-align">{{display.budget}}</ion-card-title>
+      <ion-card-title *ngIf="!display.budget" class="middle-align">Not Set</ion-card-title>
+    </ion-card-header>
+  </ion-card>
 
+  <ion-card (click)="setCategory()">
+    <ion-card-header>
+      <ion-card-subtitle class="middle-align">Category</ion-card-subtitle>
+      <ion-card-title class="middle-align">{{display.category}}</ion-card-title>
+      <ion-card-title *ngIf="!display.category" class="middle-align">Not Set</ion-card-title>
+    </ion-card-header>
+  </ion-card>
 
-  <ion-list>
-    <ion-item *ngFor="let x of retrievedMessages" (click)="presentActionSheet(x.body)">
-      <ion-label>
-        <ion-text>
-          <h3>{{x.address}}</h3>
-          <p  class="message-date">{{x.date | date: 'dd LLL'}}</p>
-        </ion-text>
-        <p>{{x.body}}</p>
-        <ion-text>
-        </ion-text>
-      </ion-label>
-    </ion-item>
-
-  </ion-list>
-
-
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="loadMore()">
-      <ion-icon name="arrow-dropdown"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
-
-  <!--<ion-fab vertical="bottom" horizontal="start" slot="fixed">-->
-    <!--<ion-fab-button (click)="hardCodedMessage()">-->
-      <!--<ion-icon name="filing"></ion-icon>-->
-    <!--</ion-fab-button>-->
-  <!--</ion-fab>-->
+  <ion-card (click)="setSubCategory()">
+    <ion-card-header>
+      <ion-card-subtitle class="middle-align">Sub-category</ion-card-subtitle>
+      <ion-card-title class="middle-align">{{display.subCategory}}</ion-card-title>
+      <ion-card-title *ngIf="!display.subCategory" class="middle-align">Not Set</ion-card-title>
+    </ion-card-header>
+  </ion-card>
 
 </ion-content>
