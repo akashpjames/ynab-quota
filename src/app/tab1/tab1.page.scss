@@ -3,9 +3,21 @@
   overflow: hidden;
 }
 
-
 ion-card{
   --background: #fff;
+}
+
+.flipcard {
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), -webkit-transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-style: preserve-3d;
+}
+
+.back {
+  transform :rotateY(180deg);
+}
+
+.flipped {
+  transform :rotateY(180deg);
 }
 
 .sync-button{

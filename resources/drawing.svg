@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 744.09448819 1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="drawing.svg">
+  <defs
+     id="defs4">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient4314">
+      <stop
+         style="stop-color:#23009c;stop-opacity:1"
+         offset="0"
+         id="stop4316" />
+      <stop
+         style="stop-color:#398eff;stop-opacity:1"
+         offset="1"
+         id="stop4318" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4314"
+       id="linearGradient4320"
+       x1="399.99997"
+       y1="732.3623"
+       x2="397.14291"
+       y2="255.21935"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.0572333,0,0,1.0572333,-6.7044726,-13.625904)" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7"
+     inkscape:cx="373.5002"
+     inkscape:cy="525.68841"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1440"
+     inkscape:window-height="804"
+     inkscape:window-x="0"
+     inkscape:window-y="1"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="opacity:0.99299999;fill:url(#linearGradient4320);fill-opacity:1;stroke:none;stroke-width:79.40000153;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:79.40000153, 79.40000153;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4136"
+       width="555.80267"
+       height="552.95239"
+       x="117.14286"
+       y="238.07649"
+       ry="60.128189"
+       rx="0"
+       inkscape:export-xdpi="286.55707"
+       inkscape:export-ydpi="286.55707" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4322"
+       style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:50px;line-height:125%;font-family:'.PingFang HK';-inkscape-font-specification:'.PingFang HK Semi-Bold';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       transform="matrix(1.4015143,0,0,1.4015143,-92.172518,-191.31404)"
+       inkscape:export-xdpi="286.55707"
+       inkscape:export-ydpi="286.55707"><flowRegion
+         id="flowRegion4324"><rect
+           id="rect4326"
+           width="351.42856"
+           height="188.57143"
+           x="205.71428"
+           y="440.93362"
+           style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-family:'.PingFang HK';-inkscape-font-specification:'.PingFang HK Semi-Bold';fill:#ffffff" /></flowRegion><flowPara
+         id="flowPara4328"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:89.99980164px;line-height:125%;font-family:'.SF Compact Rounded';-inkscape-font-specification:'.SF Compact Rounded, Bold';text-align:start;writing-mode:lr-tb;text-anchor:start">QUOTA</flowPara></flowRoot>  </g>
+</svg>

@@ -1,7 +1,7 @@
 <ion-header>
     <ion-toolbar>
         <ion-title>
-            Sync
+            Quota
         </ion-title>
     </ion-toolbar>
 </ion-header>
@@ -104,15 +104,61 @@
         </ion-list>
 
         <ion-card *ngFor="let x of quotaData">
-            <ion-card-header>
-                <ion-card-title>
-                    {{x?.name}}
-                </ion-card-title>
-                <ion-card-subtitle>
-                    <p>Budgeted: {{x?.budgeted}}</p>
-                    <p>Balance: {{x?.balance}}</p>
-                </ion-card-subtitle>
-            </ion-card-header>
+            <div (click)="flipCard(x)" [ngClass]="{'flipped': flipped[x.id]}" class="flipcard">
+                <div class="front" *ngIf="!flipped[x.id]">
+                    <ion-card-header>
+                        <ion-card-title>
+                            {{x?.name}}
+                        </ion-card-title>
+                        <ion-card-subtitle>
+                            <p>Budgeted: {{x?.budgeted}}</p>
+                            <p>Balance: {{x?.balance}}</p>
+                            <div style="background-color:lightgrey; border-radius:5px">
+                                <div [ngStyle]="{'width': x.width, 'background-color': getColor(x)}"
+                                    style="height:16px; background-image: linear-gradient(to bottom, rgba(255, 255, 0, 0.3), rgba(255, 255, 0, 0.05));border-radius:5px">
+                                </div>
+                            </div>
+                        </ion-card-subtitle>
+                    </ion-card-header>
+                </div>
+                <div class="back" *ngIf="flipped[x.id]">
+                    <ion-card-header>
+                        <div style="margin-bottom: 12px;">
+                                <span style="background-color: #ffc1079e;
+                                border-radius: 7px;
+                                width: fit-content;
+                                padding: 5px;">
+                                    <ion-icon name="menu" style="color:#d09c00;"></ion-icon>
+                            </span>
+                        Rs.56 spent on average per transaction
+                        </div>
+                  
+                        <div style="margin-bottom: 12px;">
+                                <span style="background-color: #ff928ab5;
+                                border-radius: 7px;
+                                width: fit-content;
+                                padding: 5px">
+                                    <ion-icon name="arrow-round-up" style="color:#da0f00;"></ion-icon>
+                                </span>
+                                Rs.250 on 25th for Zomato
+
+                        </div>
+                     
+
+                        <div style="margin-bottom: 12px;">
+                                <span style="background-color: #abffb6;
+                                border-radius: 7px;
+                                width: fit-content;
+                                padding: 5px">
+                                    <ion-icon name="arrow-round-down" style="color:#05b716;"></ion-icon>
+                                </span>
+                                Rs.124 on 12th for Swiggy
+                        </div>
+                     
+                        <p>This is based on 22 transactions</p>
+                    </ion-card-header>
+                </div>
+            </div>
         </ion-card>
 
     </ion-list>

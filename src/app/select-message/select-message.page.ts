@@ -6,7 +6,6 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { Storage } from '@ionic/storage';
 import { AlertController, LoadingController } from '@ionic/angular';
 
-
 @Component({
     selector: 'app-select-message',
     templateUrl: './select-message.page.html',
@@ -28,15 +27,15 @@ export class SelectMessagePage implements OnInit {
     quotaData: any[];
     categoryInfo: { index: number, id: any; name: any; };
 
-    constructor(public navCtrl: NavController, 
-                private commonService: CommonService,
-                public androidPermissions: AndroidPermissions,
-                public actionSheetController: ActionSheetController,
-                private http: HTTP,
-                private storage: Storage,
-                private loadingController: LoadingController,
-                private alertController: AlertController
-    ) {}
+    constructor(public navCtrl: NavController,
+        private commonService: CommonService,
+        public androidPermissions: AndroidPermissions,
+        public actionSheetController: ActionSheetController,
+        private http: HTTP,
+        private storage: Storage,
+        private loadingController: LoadingController,
+        private alertController: AlertController
+    ) { }
 
     ngOnInit() {
         this.storage.get('apiToken').then((val) => {
@@ -68,7 +67,7 @@ export class SelectMessagePage implements OnInit {
                 this.commonService.createToast('Budgets updated successfully');
                 loading.dismiss();
             }).catch(error => {
-                if(error.status === 401)
+                if (error.status === 401)
                     this.commonService.createToast('Add a valid Access token');
                 loading.dismiss();
             });
@@ -83,7 +82,7 @@ export class SelectMessagePage implements OnInit {
                 this.commonService.createToast('Choose the right category now');
                 loading.dismiss();
             }).catch(error => {
-                if(error.status === 401)
+                if (error.status === 401)
                     this.commonService.createToast('Add a valid Access token');
                 loading.dismiss();
             });
@@ -92,8 +91,8 @@ export class SelectMessagePage implements OnInit {
 
     async setBudget() {
         const budgetInputs = [];
-        for ( const x of this.budgets) {
-            budgetInputs.push({type: 'radio', label: x.name, value: `${x.name} || ${x.id}`});
+        for (const x of this.budgets) {
+            budgetInputs.push({ type: 'radio', label: x.name, value: `${x.name} || ${x.id}` });
         }
 
         const alert = await this.alertController.create({
@@ -127,7 +126,7 @@ export class SelectMessagePage implements OnInit {
     async setCategory() {
         const categories = [];
         this.categoryList.forEach((category, i) => {
-            categories.push({type: 'radio', label: category.name, value: `${category.name} || ${i} || ${category.id}`});
+            categories.push({ type: 'radio', label: category.name, value: `${category.name} || ${i} || ${category.id}` });
         });
 
         const alert = await this.alertController.create({
@@ -161,8 +160,8 @@ export class SelectMessagePage implements OnInit {
 
     async setSubCategory() {
         const subCategories = [];
-        for ( const x of this.subCategoriesList) {
-            subCategories.push({type: 'radio', label: x.name, value: `${x.name} || ${x.id}`});
+        for (const x of this.subCategoriesList) {
+            subCategories.push({ type: 'radio', label: x.name, value: `${x.name} || ${x.id}` });
         }
 
         const alert = await this.alertController.create({
@@ -186,13 +185,13 @@ export class SelectMessagePage implements OnInit {
                         };
                         this.display.subCategory = subCategoryInfo.name;
                         const details = {
-                            sub_cat_id : subCategoryInfo.id,
+                            sub_cat_id: subCategoryInfo.id,
                             cat_id: this.categoryInfo.id,
                             budget_id: this.budgetInfo.id,
                             name: subCategoryInfo.name
                         }
                         this.quotaData.push(details);
-                        this.storage.set('quota', JSON.stringify(this.quotaData));  
+                        this.storage.set('quota', JSON.stringify(this.quotaData));
                     }
                 }
             ]
