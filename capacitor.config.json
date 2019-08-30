@@ -1,6 +1,6 @@
 {
   "appId": "io.ionic.starter",
-  "appName": "ynab",
+  "appName": "quota",
   "bundledWebRuntime": false,
   "webDir": "www"
 }

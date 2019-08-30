@@ -1,5 +1,5 @@
 {
-  "name": "ynab",
+  "name": "quota",
   "integrations": {
     "cordova": {},
     "capacitor": {}
