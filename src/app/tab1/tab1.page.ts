@@ -4,14 +4,6 @@ import { LoadingController, AlertController } from '@ionic/angular';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { HTTP } from '@ionic-native/http/ngx';
 import { CommonService } from '../services/common.service';
-// import { Queue } from './queue';
-
-
-declare var require: any;
-const reverseMustache = require('reverse-mustache');
-
-
-declare var SMS: any;
 
 @Component({
     selector: 'app-tab1',
@@ -26,16 +18,11 @@ export class Tab1Page {
     watchedMessages: any = [];
     templateToUse = '';
     templates: any = [];
-    private timeToUpdate: any;
     expense: any = false;
     public syncedMessages: any = [];
-    private syncedMessagesToPush: any = [];
-    private messagesParsed: any;
-    private responseRecvd: any;
     public showMeMessages: any;
     public showbuttons: any;
     private headers: { Authorization: string };
-    private parsedMessagesTotal: number;
     public totalSyncs: number;
     quotaData: any
     budgetData: any;
@@ -49,43 +36,11 @@ export class Tab1Page {
         public alertController: AlertController
     ) {
         this.mykeys = [];
-        this.messagesParsed = 0;
-        this.responseRecvd = 0;
         this.showMeMessages = false;
         this.showbuttons = false;
-
-        // document.addEventListener('onSMSArrive', (e) => {
-        //     this.storage.get('messages').then((val) => {
-        //         if (val === null) {
-        //             this.messages = [];
-        //         } else {
-        //             this.messages = JSON.parse(val);
-        //         }
-        //         this.messages.push((<any>e).data.body);
-        //         this.storage.set('messages', JSON.stringify(this.messages));
-        //
-        //     });
-        //     console.log(e);
-        // });
     }
 
     ngOnInit() {
-        // this.storage.get('totalSyncs').then((val) => {
-        //     if (val === null) {
-        //         this.totalSyncs = 0;
-        //     } else {
-        //         this.totalSyncs = val;
-        //     }
-        // });
-
-        // this.storage.get('syncedMessages').then((val) => {
-        //     if (val === null) {
-        //         this.syncedMessages = [];
-        //     } else {
-        //         this.syncedMessages = JSON.parse(val);
-        //     }
-        // });
-
         this.storage.get('apiToken').then((val) => {
             if (val != null) {
                 this.headers = {
@@ -163,7 +118,7 @@ export class Tab1Page {
             .split("").reverse().join("");
     }
 
-    updateCurrency(balance){
+    updateCurrency(balance) {
         let updatedCurrencyValue;
         if (this.currencyFormat.decimal_digits === 2) {
             updatedCurrencyValue = (balance / 1000).toFixed(2);
@@ -172,9 +127,9 @@ export class Tab1Page {
         } else {
             updatedCurrencyValue = Math.round(balance / 1000);
         }
-        if(this.currencyFormat.display_symbol && this.currencyFormat.symbol_first){
+        if (this.currencyFormat.display_symbol && this.currencyFormat.symbol_first) {
             updatedCurrencyValue = `${this.currencyFormat.currency_symbol}${updatedCurrencyValue}`;
-        } else if(this.currencyFormat.display_symbol && !this.currencyFormat.symbol_first) {
+        } else if (this.currencyFormat.display_symbol && !this.currencyFormat.symbol_first) {
             updatedCurrencyValue = `${updatedCurrencyValue}${this.currencyFormat.currency_symbol}`;
         }
         updatedCurrencyValue = updatedCurrencyValue.replace('.', this.currencyFormat.decimal_separator)
@@ -197,8 +152,12 @@ export class Tab1Page {
                     categoryInformation[0].balance_edited = this.updateCurrency(categoryInformation[0].balance);
                     categoryInformation[0].budgeted_edited = this.updateCurrency(categoryInformation[0].budgeted);
                     this.quotaData.push(categoryInformation[0]);
+                    if(categoryInformation[0].budgeted<1){
+                        
+                    }
                 })
                 loading.dismiss();
+                // this.getCategoryTransactions(details[0].budget_id, this.quotaData);
             }).catch(error => {
                 if (error.status === 401)
                     this.commonService.createToast('Add a valid Access token');
@@ -206,6 +165,34 @@ export class Tab1Page {
             });
         });
     }
+
+    // This gets the transactions of the current month for each category
+    async getCategoryTransactions(budgetID, categories) {
+        const sinceDate = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-01`;
+        const loading = await this.loadingController.create({});
+        loading.present().then(() => {
+            categories.forEach((category, index) => {
+                this.http.get(`https://api.youneedabudget.com/v1/budgets/${budgetID}/categories/${category.id}/transactions/?since_date=${sinceDate}`, {}, this.headers).then(data => {
+                    this.quotaData[index].transactions = JSON.parse(data.data).data.transactions;
+                    this.quotaData[index].transactions_metaData = this.getTransactionMetaData(this.quotaData[index].transactions);
+                    loading.dismiss();
+                }).catch(error => {
+                    if (error.status === 401)
+                        this.commonService.createToast('Add a valid Access token');
+                    loading.dismiss();
+                });
+            });
+        });
+    }
+
+    getTransactionMetaData(transactions) {
+        let obj = {
+            'highest': {},
+            'lowest': {},
+            'average': {}
+        }
+    }
+
 
 
     clearTemplates() {
@@ -237,7 +224,7 @@ export class Tab1Page {
         date.setDate(date.getDate() - 2);
         this.storage.set('lastUpdate', date);
     }
-
+    
     showSMS() {
         this.storage.get('messages').then((val) => {
             if (val === null) {
@@ -247,7 +234,6 @@ export class Tab1Page {
             }
         });
     }
-
 
     getFakeData() {
         this.quotaData = [
