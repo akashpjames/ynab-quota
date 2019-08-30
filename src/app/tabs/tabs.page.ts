@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 export class TabsPage {
   constructor() {
-      console.log('I am called first');
+      console.log('I am from the tabs page');
   }
 
 }

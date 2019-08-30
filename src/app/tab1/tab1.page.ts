@@ -39,6 +39,7 @@ export class Tab1Page {
     public totalSyncs: number;
     quotaData: any
     budgetData: any;
+    currencyFormat: any;
 
     constructor(private storage: Storage,
         public commonService: CommonService,
@@ -96,6 +97,15 @@ export class Tab1Page {
                 this.commonService.createToast('Access Token not available');
             }
         });
+
+        this.storage.get('budgets').then((val) => {
+            if (val != null) {
+                this.currencyFormat = JSON.parse(val)[0].currency_format;
+                console.log(this.currencyFormat);
+            } else {
+                this.commonService.createToast('Budget has not been set');
+            }
+        })
     }
 
     doRefresh(event) {
@@ -118,7 +128,7 @@ export class Tab1Page {
 
     flipCard(x) {
         console.log(x)
-        if(this.flipped[x.id] === 'undefined') this.flipped[x.id] = true;
+        if (this.flipped[x.id] === 'undefined') this.flipped[x.id] = true;
         else this.flipped[x.id] = !this.flipped[x.id];
         // this.flipped = !this.flipped;
     }
@@ -127,13 +137,13 @@ export class Tab1Page {
         if (value.budgeted > 0) {
             const calculatedPercentage = value.balance * 100 / value.budgeted;
             switch (true) {
-                case calculatedPercentage >=75:
+                case calculatedPercentage >= 75:
                     return '#86e01e'
                     break;
-                case calculatedPercentage >=50 && calculatedPercentage < 75:
+                case calculatedPercentage >= 50 && calculatedPercentage < 75:
                     return '#f2d31b'
                     break;
-                case calculatedPercentage >=25 && calculatedPercentage < 50:
+                case calculatedPercentage >= 25 && calculatedPercentage < 50:
                     return '#f2b01e'
                     break;
                 case calculatedPercentage >= 10 && calculatedPercentage < 25:
@@ -144,6 +154,32 @@ export class Tab1Page {
                     break;
             }
         }
+    }
+
+    thousandSep(val, separator) {
+        const separator_edited = `$1${separator}`
+        return String(val).split("").reverse().join("")
+            .replace(/(\d{3}\B)/g, separator_edited)
+            .split("").reverse().join("");
+    }
+
+    updateCurrency(balance){
+        let updatedCurrencyValue;
+        if (this.currencyFormat.decimal_digits === 2) {
+            updatedCurrencyValue = (balance / 1000).toFixed(2);
+        } else if (this.currencyFormat.decimal_digits === 3) {
+            updatedCurrencyValue = (balance / 1000).toFixed(3);
+        } else {
+            updatedCurrencyValue = Math.round(balance / 1000);
+        }
+        if(this.currencyFormat.display_symbol && this.currencyFormat.symbol_first){
+            updatedCurrencyValue = `${this.currencyFormat.currency_symbol}${updatedCurrencyValue}`;
+        } else if(this.currencyFormat.display_symbol && !this.currencyFormat.symbol_first) {
+            updatedCurrencyValue = `${updatedCurrencyValue}${this.currencyFormat.currency_symbol}`;
+        }
+        updatedCurrencyValue = updatedCurrencyValue.replace('.', this.currencyFormat.decimal_separator)
+        updatedCurrencyValue = this.thousandSep(updatedCurrencyValue, this.currencyFormat.group_separator);
+        return updatedCurrencyValue;
     }
 
     async getData(categoryData) {
@@ -158,6 +194,8 @@ export class Tab1Page {
                     var subcategoriesList = this.budgetData.filter(x => x.id === val.cat_id);
                     var categoryInformation = subcategoriesList[0].categories.filter(y => y.id === val.sub_cat_id);
                     if (categoryInformation[0].budgeted > 0) categoryInformation[0].width = (categoryInformation[0].balance * 100 / categoryInformation[0].budgeted) + '%';
+                    categoryInformation[0].balance_edited = this.updateCurrency(categoryInformation[0].balance);
+                    categoryInformation[0].budgeted_edited = this.updateCurrency(categoryInformation[0].budgeted);
                     this.quotaData.push(categoryInformation[0]);
                 })
                 loading.dismiss();
