@@ -38,7 +38,7 @@ export class Tab2Page implements OnInit {
                 role: 'destructive',
                 icon: 'create',
                 handler: () => {
-                    this.commonService.createToast('Add edit event function');
+                    this.commonService.createToast('Edit function - Coming soon!');
                 }
             },{
                 text: 'Delete',

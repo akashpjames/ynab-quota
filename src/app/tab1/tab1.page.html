@@ -1,50 +1,15 @@
 <ion-content>
-    <!--<ion-card class="welcome-card">-->
-    <!--<ion-img src="/assets/ynab.svg"></ion-img>-->
-    <!--<ion-card-header>-->
-    <!--<ion-card-subtitle>SMS Import For YNAB</ion-card-subtitle>-->
-    <!--<ion-card-title>SMS Sync</ion-card-title>-->
-    <!--</ion-card-header>-->
-    <!--<ion-card-content>-->
-    <!--<p>Add a template and tap on sync when new SMS arrives</p>-->
-    <!--</ion-card-content>-->
-    <!--<ion-item>-->
-    <!--<ion-button clear item-start>Like</ion-button>-->
-    <!--<ion-button clear item-end>Comment</ion-button>-->
-    <!--</ion-item>-->
-    <!--</ion-card>-->
 
-
-
-
+    <div class="no-content-text" *ngIf="!quotaData.length">
+        <ion-icon class="no-content-icon" name="alert"></ion-icon>
+        <div>
+          <ion-label>
+            No categories were added!
+          </ion-label>
+        </div>
+      </div>
+      
     <ion-list>
-        <!--<ion-item >-->
-        <!--<ion-ripple-effect></ion-ripple-effect>-->
-        <!--<ion-button class="sync-button" color="primary" (click)="checkPermissionAndSync()">-->
-        <!--<ion-icon name="sync"></ion-icon>-->
-        <!--</ion-button>-->
-        <!--</ion-item>-->
-
-
-        <!--<ion-card (click)="presentActionSheet(tmpl)">-->
-        <!--<ion-card-header>-->
-        <!--<ion-card-title>Sodexo</ion-card-title>-->
-        <!--</ion-card-header>-->
-        <!--<ion-card-content>-->
-        <!--INR 87.00 spent on 23 Jun at Flipkart-->
-        <!--</ion-card-content>-->
-        <!--</ion-card>-->
-
-
-        <!--<ion-card (click)="presentActionSheet(tmpl)">-->
-        <!--<ion-card-header>-->
-        <!--<ion-card-title>RBL 6518</ion-card-title>-->
-        <!--</ion-card-header>-->
-        <!--<ion-card-content>-->
-        <!--INR 247.00 spent on 22 Feb at Freshmart-->
-        <!--</ion-card-content>-->
-        <!--</ion-card>-->
-
         <div *ngIf="showbuttons">
             <ion-button color="primary" (click)="clearTemplates()">Clear All Templates</ion-button>
             <ion-button color="secondary" (click)="showAllKeys()">Show All Keys</ion-button>
@@ -52,9 +17,7 @@
             <ion-button color="dark" (click)="updateLastTime()">Update Time</ion-button>
         </div>
 
-
         <table border="1">
-
             <tr *ngFor="let item of mykeys">
                 <td>{{item.key}}</td>
                 <td>
@@ -137,11 +100,11 @@
 
     </ion-list>
 
-    <!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button (click)="checkConnection()">
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button (click)="getQuotas()">
             <ion-icon size="large" name="sync"></ion-icon>
         </ion-fab-button>
-    </ion-fab> -->
+    </ion-fab>
 
     <!--<ion-fab vertical="bottom" horizontal="start" slot="fixed">-->
     <!--<ion-fab-button (click)="showConfig()">-->

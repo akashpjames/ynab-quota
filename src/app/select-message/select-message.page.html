@@ -34,5 +34,16 @@
       <ion-card-title *ngIf="!display.subCategory" class="middle-align">Not Set</ion-card-title>
     </ion-card-header>
   </ion-card>
+  
+  <div>
+    <ion-row>
+      <ion-col>
+        <ion-button color="secondary" expand="block" (click)="addMultiple()">Add one more</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button color="primary" expand="block" (click)="addCategory()">Done</ion-button>
+      </ion-col>
+    </ion-row>
+  </div>
 
 </ion-content>

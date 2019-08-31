@@ -20,7 +20,7 @@ export class Tab1Page {
     public showbuttons: any;
     private headers: { Authorization: string };
     public totalSyncs: number;
-    quotaData: any
+    quotaData: any = [];
     budgetData: any;
     currencyFormat: any;
 
@@ -29,7 +29,7 @@ export class Tab1Page {
         public androidPermissions: AndroidPermissions,
         private http: HTTP,
         private loadingController: LoadingController,
-        public alertController: AlertController
+        public alertController: AlertController,
     ) {
         this.mykeys = [];
         this.showbuttons = false;
@@ -53,18 +53,38 @@ export class Tab1Page {
                 this.currencyFormat = JSON.parse(val)[0].currency_format;
                 console.log(this.currencyFormat);
             } else {
-                this.commonService.createToast('Budget has not been set');
+                this.commonService.createToast('Access Token not available');
             }
         })
     }
 
     doRefresh(event) {
-        this.getQuotas();
+        if(!this.headers){
+            this.storage.get('apiToken').then((val) => {
+                if (val != null) {
+                    this.headers = {
+                        'Authorization': `Bearer ${val}`
+                    };
+                    this.getQuotas();
+                } else {
+                    this.commonService.createToast('Access Token not available');
+                }
+            });
+            this.storage.get('budgets').then((val) => {
+                if (val != null) {
+                    this.currencyFormat = JSON.parse(val)[0].currency_format;
+                    console.log(this.currencyFormat);
+                } else {
+                    this.commonService.createToast('Access Token not available');
+                }
+            });
+        } else {
+            this.getQuotas();  
+        }
         setTimeout(() => {
             event.target.complete();
         }, 1000);
     }
-
 
     getQuotas() {
         this.storage.get('quota').then((val) => {

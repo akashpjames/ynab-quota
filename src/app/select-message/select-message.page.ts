@@ -109,7 +109,6 @@ export class SelectMessagePage implements OnInit {
                 }, {
                     text: 'Ok',
                     handler: (data) => {
-                        this.commonService.createToast('Budget has been set');
                         this.budgetInfo = {
                             id: data.split(' || ')[1],
                             name: data.split(' || ')[0]
@@ -191,12 +190,21 @@ export class SelectMessagePage implements OnInit {
                             name: subCategoryInfo.name
                         }
                         this.quotaData.push(details);
-                        this.storage.set('quota', JSON.stringify(this.quotaData));
                     }
                 }
             ]
         });
         await alert.present();
+    }
+
+    addMultiple(){
+        this.storage.set('quota', JSON.stringify(this.quotaData));
+        this.display.category = 'Not Set';
+        this.display.subCategory = 'Not Set'
+    }
+    addCategory(){
+        this.storage.set('quota', JSON.stringify(this.quotaData));
+        this.navCtrl.navigateBack('tabs/tab1');
     }
 
     goBack() {
