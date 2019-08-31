@@ -8,42 +8,26 @@
       <ion-card-title class="middle-align">{{display.apiToken}}</ion-card-title>
       <ion-card-title *ngIf="!display.apiToken" class="middle-align">Not Set</ion-card-title>
     </ion-card-header>
-
   </ion-card>
 
-  <!-- <ion-card (click)="setBudget()">
+  <ion-card (click)="redirectToSmsToYnab()">
     <ion-card-header>
-      <ion-card-subtitle class="middle-align">Budget</ion-card-subtitle>
-      <ion-card-title class="middle-align">{{display.budget}}</ion-card-title>
-      <ion-card-title *ngIf="!display.budget" class="middle-align">Not Set</ion-card-title>
-    </ion-card-header>
-  </ion-card> -->
-
-
-
-
-  <ion-card (click)="paypalLink()">
-    <ion-card-header>
-      <ion-card-subtitle class="middle-align">Buy me a coffee</ion-card-subtitle>
-      <img class="paypal-logo" src="../../assets/logos/paypal.svg">
+      <ion-card-subtitle class="middle-align">Looking for auto import via SMS?</ion-card-subtitle>
+      <ion-card-title class="middle-align">Check 'SMS to YNAB' app</ion-card-title>
+      <img class="smsynab-logo" src="../../assets/logos/smstoynab.png">
     </ion-card-header>
   </ion-card>
 
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content
             pullingIcon="arrow-dropdown"
-            pullingText="Pull to update budgets and accounts list"
-            refreshingText="Refreshing budgets and accounts">
+            pullingText="Pull to update budgets and settings"
+            refreshingText="Refreshing budgets and settings">
     </ion-refresher-content>
   </ion-refresher>
 
   <div class="helper-buttons">
-    <ion-button color="primary" fill="clear" href="https://www.youtube.com/watch?v=1PT1QhzM5Mg&t=">Help</ion-button>
     <ion-button color="primary" fill="clear" href="https://app.youneedabudget.com/settings/developer">Get Access Token</ion-button>
   </div>
-
-
-
-
-
+  
 </ion-content>

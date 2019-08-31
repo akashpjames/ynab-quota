@@ -14,13 +14,9 @@ export class Tab1Page {
 
     flipped: any = {};
     mykeys: any;
-    messages: any = [];
-    watchedMessages: any = [];
     templateToUse = '';
     templates: any = [];
     expense: any = false;
-    public syncedMessages: any = [];
-    public showMeMessages: any;
     public showbuttons: any;
     private headers: { Authorization: string };
     public totalSyncs: number;
@@ -36,7 +32,6 @@ export class Tab1Page {
         public alertController: AlertController
     ) {
         this.mykeys = [];
-        this.showMeMessages = false;
         this.showbuttons = false;
     }
 
@@ -93,18 +88,18 @@ export class Tab1Page {
             const calculatedPercentage = value.balance * 100 / value.budgeted;
             switch (true) {
                 case calculatedPercentage >= 75:
-                    return '#86e01e'
+                    return '#1cab22'
                     break;
                 case calculatedPercentage >= 50 && calculatedPercentage < 75:
-                    return '#f2d31b'
+                    return '#86e01e'
                     break;
                 case calculatedPercentage >= 25 && calculatedPercentage < 50:
-                    return '#f2b01e'
+                    return '#f2d31b'
                     break;
                 case calculatedPercentage >= 10 && calculatedPercentage < 25:
                     return '#f27011'
                     break;
-                default:
+                case calculatedPercentage > 0 && calculatedPercentage < 10:
                     return '#f63a0f'
                     break;
             }
@@ -152,8 +147,8 @@ export class Tab1Page {
                     categoryInformation[0].balance_edited = this.updateCurrency(categoryInformation[0].balance);
                     categoryInformation[0].budgeted_edited = this.updateCurrency(categoryInformation[0].budgeted);
                     this.quotaData.push(categoryInformation[0]);
-                    if(categoryInformation[0].budgeted<1){
-                        
+                    if (categoryInformation[0].budgeted < 1) {
+
                     }
                 })
                 loading.dismiss();
@@ -224,16 +219,6 @@ export class Tab1Page {
         date.setDate(date.getDate() - 2);
         this.storage.set('lastUpdate', date);
     }
-    
-    showSMS() {
-        this.storage.get('messages').then((val) => {
-            if (val === null) {
-                this.watchedMessages = [];
-            } else {
-                this.watchedMessages = JSON.parse(val);
-            }
-        });
-    }
 
     getFakeData() {
         this.quotaData = [
@@ -244,9 +229,9 @@ export class Tab1Page {
                 "hidden": false,
                 "original_category_group_id": null,
                 "note": null,
-                "budgeted": 1000000,
+                "budgeted": "₹1,234.00",
                 "activity": -140000,
-                "balance": 860000,
+                "balance": "₹1,219.22",
                 "goal_type": null,
                 "goal_creation_month": null,
                 "goal_target": 0,

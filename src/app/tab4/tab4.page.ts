@@ -112,8 +112,8 @@ export class Tab4Page implements OnInit {
         });
     }
 
-    paypalLink() {
-        window.open('https://www.paypal.me/akashjames');
+    redirectToSmsToYnab() {
+        window.open('https://github.com/akashpjames/sms-import-for-ynab');
     }
 
     async updateAPI() {
