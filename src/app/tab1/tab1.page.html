@@ -3,12 +3,12 @@
     <div class="no-content-text" *ngIf="!quotaData.length">
         <ion-icon class="no-content-icon" name="alert"></ion-icon>
         <div>
-          <ion-label>
-            No categories were added!
-          </ion-label>
+            <ion-label>
+                No categories were added!
+            </ion-label>
         </div>
-      </div>
-      
+    </div>
+
     <ion-list>
         <div *ngIf="showbuttons">
             <ion-button color="primary" (click)="clearTemplates()">Clear All Templates</ion-button>
@@ -48,9 +48,16 @@
                                     <div class="center-align card-subtext">Balance</div>
                                 </ion-col>
                             </ion-row>
-                            <div style="background-color:lightgrey; border-radius:5px">
-                                <div [ngStyle]="{'width': x.width, 'background-color': getColor(x)}"
-                                    style="height:16px; background-image: linear-gradient(to bottom, rgba(255, 255, 0, 0.3), rgba(255, 255, 0, 0.05));border-radius:5px">
+                            <div *ngIf="x.budgeted >= x.balance">
+                                <div style="background-color:lightgrey; border-radius:5px">
+                                    <div [ngStyle]="{'width': x.width, 'background-color': getColor(x)}"
+                                        style="height:16px; background-image: linear-gradient(to bottom, rgba(255, 255, 0, 0.3), rgba(255, 255, 0, 0.05));border-radius:5px">
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="x.budgeted < x.balance">
+                                <div
+                                    style="width: 100%; background-color: #1cab22; height:16px; background-image: linear-gradient(to bottom, rgba(255, 255, 0, 0.3), rgba(255, 255, 0, 0.05));border-radius:5px">
                                 </div>
                             </div>
                         </ion-card-subtitle>
