@@ -2,9 +2,16 @@
   <div class="no-content-text" *ngIf="!availableCategories.length">
     <ion-icon class="no-content-icon" name="alert"></ion-icon>
     <div>
-      <ion-label>
-        No categories were added!
-      </ion-label>
+      <div>
+        <ion-label>
+          No categories were added!
+        </ion-label>
+      </div>
+      <div *ngIf="!accessTokenAvailable">
+        <ion-label>
+          Add access token from settings
+        </ion-label>
+      </div>
     </div>
   </div>
 
@@ -21,16 +28,14 @@
   </div>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="addCategory()">
+    <ion-fab-button [disabled]="!accessTokenAvailable" (click)="addCategory()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  
+
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content
-            pullingIcon="arrow-dropdown"
-            pullingText="Pull to see available categories"
-            refreshingText="Refreshing selected categories">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to see available categories"
+      refreshingText="Refreshing selected categories">
     </ion-refresher-content>
   </ion-refresher>
 

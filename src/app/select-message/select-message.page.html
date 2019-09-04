@@ -38,7 +38,7 @@
   <div>
     <ion-row>
       <ion-col>
-        <ion-button color="secondary" expand="block" (click)="addMultiple()">Add one more</ion-button>
+        <ion-button color="secondary" expand="block" [disabled]="!categoriesSet" (click)="addMultiple()">Add one more</ion-button>
       </ion-col>
       <ion-col>
         <ion-button color="primary" expand="block" (click)="addCategory()">Done</ion-button>

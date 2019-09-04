@@ -4,6 +4,7 @@ import { LoadingController, AlertController } from '@ionic/angular';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { HTTP } from '@ionic-native/http/ngx';
 import { CommonService } from '../services/common.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-tab1',
@@ -23,6 +24,7 @@ export class Tab1Page {
     quotaData: any = [];
     budgetData: any;
     currencyFormat: any;
+    intialLoading: boolean = true;
 
     constructor(private storage: Storage,
         public commonService: CommonService,
@@ -30,7 +32,14 @@ export class Tab1Page {
         private http: HTTP,
         private loadingController: LoadingController,
         public alertController: AlertController,
+        route:ActivatedRoute
     ) {
+        route.params.subscribe(val => {
+            if(this.commonService.refreshRequired.homePage){
+                this.ngOnInit();
+                this.commonService.refreshRequired.homePage = false;
+            }
+          });
         this.mykeys = [];
         this.showbuttons = false;
     }
@@ -44,7 +53,7 @@ export class Tab1Page {
                 this.getQuotas();
                 // this.getFakeData();
             } else {
-                this.commonService.createToast('Access Token not available');
+                this.commonService.createToast('Access Token not available', 'dark');
             }
         });
 
@@ -53,13 +62,13 @@ export class Tab1Page {
                 this.currencyFormat = JSON.parse(val)[0].currency_format;
                 console.log(this.currencyFormat);
             } else {
-                this.commonService.createToast('Access Token not available');
+                this.commonService.createToast('Access Token not available', 'dark');
             }
         })
     }
 
     doRefresh(event) {
-        if(!this.headers){
+        if (!this.headers) {
             this.storage.get('apiToken').then((val) => {
                 if (val != null) {
                     this.headers = {
@@ -67,7 +76,7 @@ export class Tab1Page {
                     };
                     this.getQuotas();
                 } else {
-                    this.commonService.createToast('Access Token not available');
+                    this.commonService.createToast('Access Token not available', 'dark');
                 }
             });
             this.storage.get('budgets').then((val) => {
@@ -75,11 +84,11 @@ export class Tab1Page {
                     this.currencyFormat = JSON.parse(val)[0].currency_format;
                     console.log(this.currencyFormat);
                 } else {
-                    this.commonService.createToast('Access Token not available');
+                    this.commonService.createToast('Access Token not available', 'dark');
                 }
             });
         } else {
-            this.getQuotas();  
+            this.getQuotas();
         }
         setTimeout(() => {
             event.target.complete();
@@ -91,7 +100,7 @@ export class Tab1Page {
             if (val != null) {
                 this.getData(val);
             } else {
-                this.commonService.createToast('No categories has been set');
+                this.commonService.createToast('No categories has been set', 'dark');
             }
         });
     }
@@ -155,30 +164,35 @@ export class Tab1Page {
     async getData(categoryData) {
         const details = JSON.parse(categoryData);
         const loading = await this.loadingController.create({});
-        loading.present().then(() => {
-            this.http.get(`https://api.youneedabudget.com/v1/budgets/${details[0].budget_id}/categories/`, {}, this.headers).then(data => {
-                this.budgetData = JSON.parse(data.data).data.category_groups;
-                this.quotaData = [];
-                details.forEach((val) => {
-                    console.log(val);
-                    var subcategoriesList = this.budgetData.filter(x => x.id === val.cat_id);
-                    var categoryInformation = subcategoriesList[0].categories.filter(y => y.id === val.sub_cat_id);
-                    if (categoryInformation[0].budgeted > 0) categoryInformation[0].width = (categoryInformation[0].balance * 100 / categoryInformation[0].budgeted) + '%';
-                    categoryInformation[0].balance_edited = this.updateCurrency(categoryInformation[0].balance);
-                    categoryInformation[0].budgeted_edited = this.updateCurrency(categoryInformation[0].budgeted);
-                    this.quotaData.push(categoryInformation[0]);
-                    if (categoryInformation[0].budgeted < 1) {
+        if (details.length && details[0].budget_id) {
+            loading.present().then(() => {
+                this.http.get(`https://api.youneedabudget.com/v1/budgets/${details[0].budget_id}/categories/`, {}, this.headers).then(data => {
+                    this.budgetData = JSON.parse(data.data).data.category_groups;
+                    this.quotaData = [];
+                    details.forEach((val) => {
+                        console.log(val);
+                        var subcategoriesList = this.budgetData.filter(x => x.id === val.cat_id);
+                        var categoryInformation = subcategoriesList[0].categories.filter(y => y.id === val.sub_cat_id);
+                        if (categoryInformation[0].budgeted > 0) categoryInformation[0].width = (categoryInformation[0].balance * 100 / categoryInformation[0].budgeted) + '%';
+                        categoryInformation[0].balance_edited = this.updateCurrency(categoryInformation[0].balance);
+                        categoryInformation[0].budgeted_edited = this.updateCurrency(categoryInformation[0].budgeted);
+                        this.quotaData.push(categoryInformation[0]);
+                        if (categoryInformation[0].budgeted < 1) {
 
-                    }
-                })
-                loading.dismiss();
-                // this.getCategoryTransactions(details[0].budget_id, this.quotaData);
-            }).catch(error => {
-                if (error.status === 401)
-                    this.commonService.createToast('Add a valid Access token');
-                loading.dismiss();
+                        }
+                    })
+                    this.intialLoading = false;
+                    loading.dismiss();
+                    // this.getCategoryTransactions(details[0].budget_id, this.quotaData);
+                }).catch(error => {
+                    if (error.status === 401)
+                        this.commonService.createToast('Add a valid Access token', 'dark');
+                    else this.commonService.createToast(error.error, 'danger');
+                    loading.dismiss();
+                    this.intialLoading = false;
+                });
             });
-        });
+        }
     }
 
     // This gets the transactions of the current month for each category
@@ -193,7 +207,8 @@ export class Tab1Page {
                     loading.dismiss();
                 }).catch(error => {
                     if (error.status === 401)
-                        this.commonService.createToast('Add a valid Access token');
+                        this.commonService.createToast('Add a valid Access token', 'dark');
+                    else this.commonService.createToast(error.error, 'danger');
                     loading.dismiss();
                 });
             });
@@ -212,7 +227,7 @@ export class Tab1Page {
 
     clearTemplates() {
         this.storage.clear().then(() => {
-            this.commonService.createToast('All templates have been cleared');
+            this.commonService.createToast('All templates have been cleared', 'dark');
         });
     }
 

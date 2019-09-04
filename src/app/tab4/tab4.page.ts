@@ -34,7 +34,7 @@ export class Tab4Page implements OnInit {
                     'Authorization': `Bearer ${val}`
                 };
             } else {
-                this.commonService.createToast('Access Token not available');
+                this.commonService.createToast('Access Token not available', 'dark');
             }
         });
     }
@@ -53,11 +53,12 @@ export class Tab4Page implements OnInit {
             this.http.get(`https://api.youneedabudget.com/v1/budgets/`, {}, this.headers).then(data => {
                 this.budgets = JSON.parse(data.data).data.budgets;
                 this.storage.set('budgets', JSON.stringify(this.budgets));
-                this.commonService.createToast('Budgets updated successfully');
+                this.commonService.createToast('Budgets updated successfully', 'dark');
                 loading.dismiss();
             }).catch(error => {
                 if (error.status === 401)
-                    this.commonService.createToast('Add a valid Access token');
+                    this.commonService.createToast('Add a valid Access token', 'dark');
+                else this.commonService.createToast(error.error, 'danger');
                 loading.dismiss();
             });
         });
@@ -93,7 +94,8 @@ export class Tab4Page implements OnInit {
                             'Authorization': `Bearer ${this.apiToken}`
                         };
                         this.storage.set('apiToken', this.apiToken);
-                        this.commonService.createToast('Access Token has been set');
+                        this.commonService.createToast('Access Token has been set', 'dark');
+                        this.commonService.acessTokenRefreshRequired.categoriesPage = true;
                         if(this.apiToken.length) this.display.apiToken = `xxxxxxx-${this.apiToken.substr(-6)}`;
                         else this.display.apiToken = 'Not Set';
                         this.updateBudgets();

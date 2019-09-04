@@ -26,6 +26,7 @@ export class SelectMessagePage implements OnInit {
     subCategoriesList: any;
     quotaData: any[];
     categoryInfo: { index: number, id: any; name: any; };
+    categoriesSet: boolean = false;
 
     constructor(public navCtrl: NavController,
         private commonService: CommonService,
@@ -45,7 +46,7 @@ export class SelectMessagePage implements OnInit {
                 };
                 this.updateBudgets();
             } else {
-                this.commonService.createToast('Access token not available');
+                this.commonService.createToast('Access token not available', 'dark');
             }
         });
 
@@ -64,11 +65,13 @@ export class SelectMessagePage implements OnInit {
             this.http.get(`https://api.youneedabudget.com/v1/budgets/`, {}, this.headers).then(data => {
                 this.budgets = JSON.parse(data.data).data.budgets;
                 this.storage.set('budgets', JSON.stringify(this.budgets));
-                this.commonService.createToast('Budgets updated successfully');
+                this.commonService.createToast('Budgets updated successfully', 'dark');
                 loading.dismiss();
             }).catch(error => {
                 if (error.status === 401)
-                    this.commonService.createToast('Add a valid Access token');
+                    this.commonService.createToast('Add a valid Access token', 'dark');
+                else
+                    this.commonService.createToast(error.error, 'danger');
                 loading.dismiss();
             });
         });
@@ -79,47 +82,52 @@ export class SelectMessagePage implements OnInit {
         loading.present().then(() => {
             this.http.get(`https://api.youneedabudget.com/v1/budgets/${this.budgetInfo.id}/categories`, {}, this.headers).then(data => {
                 this.categoryList = JSON.parse(data.data).data.category_groups;
-                this.commonService.createToast('Choose the right category now');
+                this.categoryList = this.categoryList.filter(category => category.name !== 'Internal Master Category')
+                this.commonService.createToast('Choose the right category now', 'dark');
                 loading.dismiss();
             }).catch(error => {
-                if (error.status === 401)
-                    this.commonService.createToast('Add a valid Access token');
+                if (error.status === 401) this.commonService.createToast('Add a valid Access token', 'dark');
+                else this.commonService.createToast(error.error, 'danger')
                 loading.dismiss();
             });
         });
     }
 
     async setBudget() {
-        const budgetInputs = [];
-        for (const x of this.budgets) {
-            budgetInputs.push({ type: 'radio', label: x.name, value: `${x.name} || ${x.id}` });
+        if(this.budgets === undefined) {
+            this.commonService.createToast('No budgets available. Add a valid access token', 'dark');
+        } else {
+            const budgetInputs = [];
+            for (const x of this.budgets) {
+                budgetInputs.push({ type: 'radio', label: x.name, value: `${x.name} || ${x.id}` });
+            }
+    
+            const alert = await this.alertController.create({
+                header: 'Choose Budget',
+                inputs: budgetInputs,
+                buttons: [
+                    {
+                        text: 'Cancel',
+                        role: 'cancel',
+                        cssClass: 'secondary',
+                        handler: () => {
+                            console.log('Confirm Cancel');
+                        }
+                    }, {
+                        text: 'Ok',
+                        handler: (data) => {
+                            this.budgetInfo = {
+                                id: data.split(' || ')[1],
+                                name: data.split(' || ')[0]
+                            };
+                            this.display.budget = this.budgetInfo.name;
+                            this.updateCategories();
+                        }
+                    }
+                ]
+            });
+            await alert.present();
         }
-
-        const alert = await this.alertController.create({
-            header: 'Choose Budget',
-            inputs: budgetInputs,
-            buttons: [
-                {
-                    text: 'Cancel',
-                    role: 'cancel',
-                    cssClass: 'secondary',
-                    handler: () => {
-                        console.log('Confirm Cancel');
-                    }
-                }, {
-                    text: 'Ok',
-                    handler: (data) => {
-                        this.budgetInfo = {
-                            id: data.split(' || ')[1],
-                            name: data.split(' || ')[0]
-                        };
-                        this.display.budget = this.budgetInfo.name;
-                        this.updateCategories();
-                    }
-                }
-            ]
-        });
-        await alert.present();
     }
 
     async setCategory() {
@@ -142,7 +150,7 @@ export class SelectMessagePage implements OnInit {
                 }, {
                     text: 'Ok',
                     handler: (data) => {
-                        this.commonService.createToast('Category has been set');
+                        this.commonService.createToast('Category has been set', 'dark');
                         this.categoryInfo = {
                             index: data.split(' || ')[1],
                             name: data.split(' || ')[0],
@@ -177,7 +185,7 @@ export class SelectMessagePage implements OnInit {
                 }, {
                     text: 'Ok',
                     handler: (data) => {
-                        this.commonService.createToast('Sub Category has been set');
+                        this.commonService.createToast('Sub Category has been set', 'dark');
                         const subCategoryInfo = {
                             id: data.split(' || ')[1],
                             name: data.split(' || ')[0]
@@ -190,6 +198,7 @@ export class SelectMessagePage implements OnInit {
                             name: subCategoryInfo.name
                         }
                         this.quotaData.push(details);
+                        this.categoriesSet = true;
                     }
                 }
             ]
@@ -201,10 +210,13 @@ export class SelectMessagePage implements OnInit {
         this.storage.set('quota', JSON.stringify(this.quotaData));
         this.display.category = 'Not Set';
         this.display.subCategory = 'Not Set'
+        this.categoriesSet = false;
     }
     addCategory(){
         this.storage.set('quota', JSON.stringify(this.quotaData));
         this.navCtrl.navigateBack('tabs/tab1');
+        this.commonService.refreshRequired.homePage = true;
+        this.commonService.refreshRequired.categoriesPage = true;
     }
 
     goBack() {

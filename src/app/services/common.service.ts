@@ -10,11 +10,14 @@ const monthNames = ["January", "February", "March", "April", "May", "June", "Jul
 
 export class CommonService {
     private message: any;
+    public refreshRequired: {'homePage': boolean, 'categoriesPage': boolean} = {'homePage': false, 'categoriesPage': false};
+    public acessTokenRefreshRequired: {'categoriesPage': boolean} = {'categoriesPage': false};
 
     constructor(private storage: Storage,
                 public toastController: ToastController,
                 private http: HTTP,
-                private loadingController: LoadingController) {}
+                private loadingController: LoadingController) 
+                {}
 
     set(message) {
         this.message = message;
@@ -28,10 +31,10 @@ export class CommonService {
         return this.message;
     }
 
-    createToast(message) {
+    createToast(message, color) {
         const toast = this.toastController.create({
             message: message,
-            color: 'dark',
+            color: color,
             duration: 1500,
             position: 'top'
         });
@@ -45,7 +48,7 @@ export class CommonService {
             if (val != null) {
                 return {'Authorization': `Bearer ${val}`};
             } else {
-                this.createToast('Access Token not available');
+                this.createToast('Access Token not available', 'dark');
                 return null;
             }
         });

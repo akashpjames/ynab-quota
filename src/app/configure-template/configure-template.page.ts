@@ -52,7 +52,7 @@ export class ConfigureTemplatePage implements OnInit {
 
         this.storage.get('accounts').then((val) => {
             if (val === null) {
-                this.commonService.createToast('Update accounts from settings');
+                this.commonService.createToast('Update accounts from settings', 'dark');
                 //this.updateAccounts(null);
             } else {
                 this.accounts = JSON.parse(val);
@@ -64,7 +64,7 @@ export class ConfigureTemplatePage implements OnInit {
                             this.budgetID = JSON.parse(val).id;
                         } else {
                             this.budgetID = null;
-                            this.commonService.createToast('Please update budget');
+                            this.commonService.createToast('Please update budget', 'dark');
                         }
                     });
 
@@ -82,19 +82,19 @@ export class ConfigureTemplatePage implements OnInit {
 
     updateAccounts(e) {
         if (this.budgetID === null || this.headers === null) {
-            this.commonService.createToast('Access token or Budget is not set');
+            this.commonService.createToast('Access token or Budget is not set', 'dark');
         } else {
             this.http.get(`https://api.youneedabudget.com/v1/budgets/${this.budgetID}`, {}, this.headers).then(data => {
                 const parsedAccounts = JSON.parse(data.data).data.budget.accounts;
                 this.accounts = parsedAccounts;
-                this.commonService.createToast('Accounts updated');
+                this.commonService.createToast('Accounts updated', 'dark');
                 this.storage.set('accounts', JSON.stringify(parsedAccounts));
                 if (e) {
                     e.target.complete();
                 }
             })
                 .catch(error => {
-                    this.commonService.createToast('Error updating accounts');
+                    this.commonService.createToast('Error updating accounts', 'danger');
                     console.log(error.error); // error message as string
                     if (e) {
                         e.target.complete();
@@ -149,7 +149,7 @@ export class ConfigureTemplatePage implements OnInit {
             this.price = this.text;
             window.getSelection().empty();
         } else {
-            this.commonService.createToast('Price not set. Select text and click on button');
+            this.commonService.createToast('Price not set. Select text and click on button', 'dark');
         }
     }
 
@@ -160,7 +160,7 @@ export class ConfigureTemplatePage implements OnInit {
             this.date = this.text;
             window.getSelection().empty();
         } else {
-            this.commonService.createToast('Date not set. Select text and click on button');
+            this.commonService.createToast('Date not set. Select text and click on button', 'dark');
         }
     }
 
@@ -170,7 +170,7 @@ export class ConfigureTemplatePage implements OnInit {
             this.memo = this.text;
             window.getSelection().empty();
         } else {
-            this.commonService.createToast('Memo not set. Select text and click on button');
+            this.commonService.createToast('Memo not set. Select text and click on button', 'dark');
         }
     }
 
@@ -190,7 +190,7 @@ export class ConfigureTemplatePage implements OnInit {
             });
             window.getSelection().empty();
         } else {
-            this.commonService.createToast('Unique text not set. Select text and click on button');
+            this.commonService.createToast('Unique text not set. Select text and click on button', 'dark');
         }
     }
 
@@ -200,7 +200,7 @@ export class ConfigureTemplatePage implements OnInit {
             this.dynamic.push(this.text);
             window.getSelection().empty();
         } else {
-            this.commonService.createToast('Variable text not set. Select text and click on button');
+            this.commonService.createToast('Variable text not set. Select text and click on button', 'dark');
         }
     }
 
@@ -209,7 +209,7 @@ export class ConfigureTemplatePage implements OnInit {
         this.checkAndUpdateLastTime();
 
         if (this.budgetID === null) {
-            this.commonService.createToast('Budget is not set');
+            this.commonService.createToast('Budget is not set', 'dark');
         } else {
             if (this.price.length && this.phrase.length && this.date.length && this.templateName.length && this.account.id.length && this.expenseType.length) {
                 this.generated = this.selectedMsg.replace(this.price, '{{price}}');
@@ -237,7 +237,7 @@ export class ConfigureTemplatePage implements OnInit {
                     this.availableTemplates = this.templates;
                 });
 
-                this.commonService.createToast('Template has been generated');
+                this.commonService.createToast('Template has been generated', 'dark');
                 this.navCtrl.navigateBack('/tabs/tab2');
             }
         }
