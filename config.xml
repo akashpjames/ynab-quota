@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.ynabquota.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.ynabquota.starter" version="0.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Quota for YNAB</name>
     <description>A helper app for YNAB which shows the balance in the categories chosen.</description>
     <author email="akashpjames.dev@gmail.com" href="https://github.com/akashpjames">Akash P James</author>
