@@ -4,7 +4,6 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { AlertController, LoadingController } from '@ionic/angular';
 import { CommonService } from '../services/common.service';
 
-
 @Component({
     selector: 'app-tab4',
     templateUrl: 'tab4.page.html',
@@ -13,10 +12,8 @@ import { CommonService } from '../services/common.service';
 
 export class Tab4Page implements OnInit {
     private apiToken: string;
-    private budget: string;
     private headers: { Authorization: string };
     private budgets: any;
-    private budgetID: any;
     public display = {
         apiToken: '',
         budget: '',
